@@ -15,9 +15,9 @@ class FirebaseService
     {
         $factory = (new Factory)
             //Path to service account file
-            ->withServiceAccount(storage_path('app/firebase/firebase_credentials.json'))
+            ->withServiceAccount(storage_path('app/firebase/firebase-credentials.json'))
             //Change This to firebase realtime database path
-            ->withDatabaseUri('https://attendanceapp-b2086-default-rtdb.asia-southeast1.firebasedatabase.app/');
+            ->withDatabaseUri('https://qr-attendanceapp-default-rtdb.asia-southeast1.firebasedatabase.app');
 
         $this->database = $factory->createDatabase();
         $this->messaging = $factory->createMessaging();
