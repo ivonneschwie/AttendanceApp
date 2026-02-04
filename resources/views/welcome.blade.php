@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Laravel Firebase Auth</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800 flex items-center justify-center h-screen">
+@extends('layouts.app')
+
+@section('content')
+<div class="flex items-center justify-center h-screen">
     <div class="container mx-auto p-4">
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -72,5 +69,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
