@@ -24,21 +24,13 @@ class FirebaseController extends Controller
         ]);
 
         try {
-            $user = $this->auth->createUserWithEmailAndPassword($request->email, $request->password);
+            $this->auth->createUserWithEmailAndPassword($request->email, $request->password);
 
-            return response()->json([
-                'message' => 'Signup successful!',
-                'user' => $user,
-            ]);
+            return redirect('/')->with('success', 'Account created successfully! Please login.');
         } catch (EmailExists $e) {
-            return response()->json([
-                'message' => 'Email already exists.',
-            ], 400);
+            return back()->withErrors(['email' => 'Email already exists.']);
         } catch (\Throwable $e) {
-            return response()->json([
-                'message' => 'An error occurred during signup.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return back()->withErrors(['message' => 'An error occurred during signup.']);
         }
     }
 
@@ -51,16 +43,25 @@ class FirebaseController extends Controller
 
         try {
             $signInResult = $this->auth->signInWithEmailAndPassword($request->email, $request->password);
-
-            return response()->json([
-                'message' => 'Login successful!',
-                'data' => $signInResult->data(),
-            ]);
+            session(['user' => $signInResult->data()]);
+            return redirect('/dashboard');
         } catch (\Throwable $e) {
-            return response()->json([
-                'message' => 'Invalid credentials.',
-                'error' => $e->getMessage(),
-            ], 401);
+            return back()->withErrors(['message' => 'Invalid credentials.']);
         }
+    }
+
+    public function dashboard()
+    {
+        if (session('user')) {
+            return view('dashboard');
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function logout()
+    {
+        session()->forget('user');
+        return redirect('/');
     }
 }
