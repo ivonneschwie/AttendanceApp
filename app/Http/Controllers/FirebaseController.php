@@ -50,10 +50,18 @@ class FirebaseController extends Controller
             $userUid = $signInResult->firebaseUserId();
             $userData = $this->database->getReference('users/' . $userUid)->getValue();
 
+            $isAdmin = isset($userData['admin']) && $userData['admin'] === true;
+
             session([
                 'user' => $signInResult->data(),
-                'user_name' => $userData['firstName'] ?? ''
+                'user_name' => $userData['firstName'] ?? '',
+                'is_admin' => $isAdmin
             ]);
+
+            if ($isAdmin) {
+                return redirect('/admin/dashboard');
+            }
+
             return redirect('/dashboard');
         } catch (\Throwable $e) {
             return back()->withErrors(['login_error' => 'Invalid credentials.']);
@@ -63,6 +71,9 @@ class FirebaseController extends Controller
     public function dashboard()
     {
         if (session('user')) {
+            if (session('is_admin')) {
+                return redirect('/admin/dashboard');
+            }
             $userName = session('user_name');
             return view('dashboard', ['userName' => $userName]);
         } else {
@@ -70,11 +81,23 @@ class FirebaseController extends Controller
         }
     }
 
+    public function adminDashboard()
+    {
+        if (session('is_admin')) {
+            $users = $this->database->getReference('users')->getValue();
+            return view('admin.dashboard', ['users' => $users]);
+        } else {
+            return redirect('/');
+        }
+    }
+
+
     public function logout()
     {
         session()->forget('user');
         session()->forget('user_uid');
         session()->forget('user_name');
+        session()->forget('is_admin');
         return redirect('/');
     }
 
@@ -107,6 +130,6 @@ class FirebaseController extends Controller
 
         session()->forget('user_uid');
 
-        return redirect('/')->with('success', 'Success! Please log in.');
+        return redirect('/')->with('success', 'Onboarding data saved successfully! Please log in.');
     }
 }

@@ -6,8 +6,8 @@
 
         <div class="w-full max-w-md mx-auto">
             <div class="flex border-b">
-                <button id="login-tab" class="py-2 px-4 rounded-tl-md font-semibold @if($errors->has('login_error') || !$errors->any()) bg-white text-gray-500 border-b-2 border-blue-500 @else bg-gray-200 text-gray-500 @endif" onclick="showTab('login')">Login</button>
-                <button id="signup-tab" class="py-2 px-4 rounded-tr-md font-semibold @if($errors->has('login_error') || !$errors->any()) bg-gray-200 text-gray-500 @else bg-white text-gray-500 border-b-2 border-blue-500 @endif" onclick="showTab('signup')">Signup</button>
+                <button id="login-tab" class="w-1/2 text-center py-2 px-4 rounded-tl-md font-semibold @if($errors->has('login_error') || !$errors->any()) bg-white text-gray-500 border-b-2 border-blue-500 @else bg-gray-300 text-gray-500 @endif" onclick="showTab('login')">Login</button>
+                <button id="signup-tab" class="w-1/2 text-center py-2 px-4 rounded-tr-md font-semibold @if($errors->has('login_error') || !$errors->any()) bg-gray-300 text-gray-500 @else bg-white text-gray-500 border-b-2 border-blue-500 @endif" onclick="showTab('signup')">Signup</button>
             </div>
 
             <div id="login" class="p-4 bg-white shadow-xl rounded-tr-xl rounded-b-xl @if($errors->has('login_error') || !$errors->any()) @else hidden @endif">
@@ -38,8 +38,8 @@
                         </label>
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="login-password" type="password" name="password" placeholder="******************" required>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    <div class="flex items-center justify-center">
+                        <button class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                             Login
                         </button>
                     </div>
@@ -71,10 +71,10 @@
                         </label>
                         <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="signup-password" type="password" name="password" placeholder="******************" required>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    <div class="flex items-center justify-center">
+                        <button class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                             Signup
-                        </button
+                        </button>
                     </div>
                 </form>
             </div>
@@ -98,16 +98,16 @@
             signupTab.classList.remove('hidden');
             loginTab.classList.add('hidden');
             signupTabButton.classList.add('border-b-2', 'border-blue-500', 'bg-white');
-            signupTabButton.classList.remove('bg-gray-200');
+            signupTabButton.classList.remove('bg-gray-300');
             loginTabButton.classList.remove('border-b-2', 'border-blue-500', 'bg-white');
-            loginTabButton.classList.add('bg-gray-200');
+            loginTabButton.classList.add('bg-gray-300');
         } else {
             loginTab.classList.remove('hidden');
             signupTab.classList.add('hidden');
             loginTabButton.classList.add('border-b-2', 'border-blue-500', 'bg-white');
-            loginTabButton.classList.remove('bg-gray-200');
+            loginTabButton.classList.remove('bg-gray-300');
             signupTabButton.classList.remove('border-b-2', 'border-blue-500', 'bg-white');
-            signupTabButton.classList.add('bg-gray-200');
+            signupTabButton.classList.add('bg-gray-300');
         }
     }
 </script>
