@@ -46,7 +46,7 @@ class FirebaseController extends Controller
             session(['user' => $signInResult->data()]);
             return redirect('/dashboard');
         } catch (\Throwable $e) {
-            return back()->withErrors(['message' => 'Invalid credentials.']);
+            return back()->withErrors(['login_error' => 'Invalid credentials.']);
         }
     }
 
