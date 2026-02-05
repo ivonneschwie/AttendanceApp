@@ -14,3 +14,5 @@ Route::post('/signup', [FirebaseController::class, 'signup']);
 Route::post('/login', [FirebaseController::class, 'login']);
 Route::get('/dashboard', [FirebaseController::class, 'dashboard']);
 Route::get('/logout', [FirebaseController::class, 'logout']);
+Route::get('/onboarding', [FirebaseController::class, 'onboarding']);
+Route::post('/onboarding', [FirebaseController::class, 'storeOnboardingData']);
