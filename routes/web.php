@@ -18,3 +18,8 @@ Route::get('/logout', [FirebaseController::class, 'logout']);
 Route::get('/onboarding', [FirebaseController::class, 'onboarding']);
 Route::post('/onboarding', [FirebaseController::class, 'storeOnboardingData']);
 Route::get('/qrcode', [FirebaseController::class, 'qrcode']);
+
+Route::middleware('admin')->group(function () {
+    Route::get('/admin/register-instructor', [FirebaseController::class, 'showRegisterInstructorForm']);
+    Route::post('/admin/register-instructor', [FirebaseController::class, 'registerInstructor']);
+});

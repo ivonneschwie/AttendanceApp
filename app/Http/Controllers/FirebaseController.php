@@ -51,16 +51,16 @@ class FirebaseController extends Controller
             $userUid = $signInResult->firebaseUserId();
             $userData = $this->database->getReference('users/' . $userUid)->getValue();
 
-            $isAdmin = isset($userData['admin']) && $userData['admin'] === true;
+            $userType = $userData['type'] ?? 'student';
 
             session([
                 'user' => $signInResult->data(),
                 'user_name' => $userData['firstName'] ?? '',
-                'is_admin' => $isAdmin,
+                'is_admin' => $userType === 'admin',
                 'user_uid' => $userUid
             ]);
 
-            if ($isAdmin) {
+            if ($userType === 'admin') {
                 return redirect('/admin/dashboard');
             }
 
@@ -130,10 +130,46 @@ class FirebaseController extends Controller
             'lastName' => $request->last_name,
             'middleInitial' => $request->middle_initial,
             'schoolId' => $request->school_id,
+            'type' => 'student',
         ]);
 
         session()->forget('user_uid');
 
         return redirect('/')->with('success', 'Onboarding data saved successfully! Please log in.');
+    }
+
+    public function showRegisterInstructorForm()
+    {
+        return view('admin.register-instructor');
+    }
+
+    public function registerInstructor(Request $request)
+    {
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'middle_initial' => 'nullable|string|max:1',
+            'school_id' => 'required|string',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+        ]);
+
+        try {
+            $user = $this->auth->createUserWithEmailAndPassword($request->email, $request->password);
+
+            $this->database->getReference('users/' . $user->uid)->set([
+                'firstName' => $request->first_name,
+                'lastName' => $request->last_name,
+                'middleInitial' => $request->middle_initial,
+                'schoolId' => $request->school_id,
+                'type' => 'instructor',
+            ]);
+
+            return redirect('/admin/dashboard')->with('success', 'Instructor registered successfully!');
+        } catch (EmailExists $e) {
+            return back()->withErrors(['email' => 'Email already exists.']);
+        } catch (\Throwable $e) {
+            return back()->withErrors(['message' => 'An error occurred during registration.']);
+        }
     }
 }
