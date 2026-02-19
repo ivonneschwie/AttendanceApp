@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Kreait\Firebase\Auth as FirebaseAuth;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Exception\Auth\EmailExists;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FirebaseController extends Controller
 {
@@ -55,7 +56,8 @@ class FirebaseController extends Controller
             session([
                 'user' => $signInResult->data(),
                 'user_name' => $userData['firstName'] ?? '',
-                'is_admin' => $isAdmin
+                'is_admin' => $isAdmin,
+                'user_uid' => $userUid
             ]);
 
             if ($isAdmin) {
@@ -75,7 +77,9 @@ class FirebaseController extends Controller
                 return redirect('/admin/dashboard');
             }
             $userName = session('user_name');
-            return view('dashboard', ['userName' => $userName]);
+            $userUid = session('user_uid');
+            $qrCode = QrCode::size(200)->generate($userUid);
+            return view('dashboard', ['userName' => $userName, 'qrCode' => $qrCode]);
         } else {
             return redirect('/');
         }
