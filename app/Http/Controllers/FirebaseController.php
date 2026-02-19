@@ -56,12 +56,16 @@ class FirebaseController extends Controller
             session([
                 'user' => $signInResult->data(),
                 'user_name' => $userData['firstName'] ?? '',
-                'is_admin' => $userType === 'admin',
+                'user_type' => $userType,
                 'user_uid' => $userUid
             ]);
 
             if ($userType === 'admin') {
                 return redirect('/admin/dashboard');
+            }
+
+            if ($userType === 'instructor') {
+                return redirect('/instructor/dashboard');
             }
 
             return redirect('/dashboard');
@@ -73,8 +77,12 @@ class FirebaseController extends Controller
     public function dashboard()
     {
         if (session('user')) {
-            if (session('is_admin')) {
+            $userType = session('user_type');
+            if ($userType === 'admin') {
                 return redirect('/admin/dashboard');
+            }
+            if ($userType === 'instructor') {
+                return redirect('/instructor/dashboard');
             }
             $userName = session('user_name');
             $userUid = session('user_uid');
@@ -87,9 +95,19 @@ class FirebaseController extends Controller
 
     public function adminDashboard()
     {
-        if (session('is_admin')) {
+        if (session('user_type') === 'admin') {
             $users = $this->database->getReference('users')->getValue();
             return view('admin.dashboard', ['users' => $users]);
+        } else {
+            return redirect('/');
+        }
+    }
+
+    public function instructorDashboard()
+    {
+        if (session('user_type') === 'instructor' || session('user_type') === 'admin') {
+            $users = $this->database->getReference('users')->getValue();
+            return view('instructor.dashboard', ['users' => $users]);
         } else {
             return redirect('/');
         }
@@ -101,7 +119,7 @@ class FirebaseController extends Controller
         session()->forget('user');
         session()->forget('user_uid');
         session()->forget('user_name');
-        session()->forget('is_admin');
+        session()->forget('user_type');
         return redirect('/');
     }
 
