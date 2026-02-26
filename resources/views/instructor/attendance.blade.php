@@ -10,10 +10,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="text-center">
-                <h3 class="text-xl font-semibold mb-4">Scan to Mark Attendance</h3>
-                <div class="flex justify-center">
-                    <x-qrcode :qrCode="$qrCode" />
-                </div>
+                <h3 class="text-xl font-semibold mb-4">Scan Student QR Code</h3>
+                <button id="scan-qr-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Scan QR Code</button>
+                <div id="reader" style="width: 500px;"></div>
             </div>
 
             <div>
@@ -34,4 +33,49 @@
         </div>
     </div>
 </div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const scanButton = document.getElementById('scan-qr-btn');
+        const reader = new Html5Qrcode("reader");
+
+        scanButton.addEventListener('click', () => {
+            reader.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: 250
+                },
+                (decodedText, decodedResult) => {
+                    const roomCode = "{{ $roomCode }}";
+                    fetch('/api/attendance', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            studentUid: decodedText,
+                            roomCode: roomCode
+                        })
+                    }).then(response => response.json()).then(data => {
+                        if (data.success) {
+                            alert('Attendance marked successfully!');
+                            location.reload();
+                        } else {
+                            alert('Failed to mark attendance.');
+                        }
+                    });
+                    reader.stop();
+                },
+                (errorMessage) => {
+                    // parse error, ignore it.
+                })
+                .catch((err) => {
+                    // Start failed, handle it.
+                });
+        });
+    });
+</script>
 @endsection

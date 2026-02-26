@@ -4,11 +4,17 @@
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-4 md:p-8 bg-white shadow-md rounded-lg mx-auto">
         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
-            <h2 class="text-3xl font-bold mb-4 sm:mb-0 text-center sm:text-left">Welcome, Student!</h2>
+            <h2 class="text-3xl font-bold mb-4 sm:mb-0 text-center sm:text-left">Welcome, {{ $userName }}!</h2>
             <div class="flex flex-col sm:flex-row">
                 <a href="/student/join-room" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2 text-center">Join Room</a>
-                <a href="/student/scan" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2 text-center">Scan QR</a>
                 <a href="/logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full sm:w-auto text-center">Logout</a>
+            </div>
+        </div>
+
+        <div class="mb-6 text-center">
+            <h3 class="text-2xl font-bold mb-4">Your QR Code</h3>
+            <div class="flex justify-center">
+                {!! $qrCode !!}
             </div>
         </div>
 

@@ -87,6 +87,7 @@ class FirebaseController extends Controller
 
             $userName = session('user_name');
             $userUid = session('user_uid');
+            $qrCode = QrCode::size(200)->generate($userUid);
 
             $allRooms = $this->database->getReference('rooms')->getValue() ?? [];
             $joinedRooms = [];
@@ -98,7 +99,8 @@ class FirebaseController extends Controller
             }
 
             return view('student.dashboard', [
-                'userName' => $userName,
+                'userName' => $userName, 
+                'qrCode' => $qrCode,
                 'rooms' => $joinedRooms
             ]);
         } else {

@@ -75,16 +75,14 @@ class RoomController extends Controller
             abort(403);
         }
 
-        $qrCode = QrCode::size(200)->generate($roomCode);
-
         $attendance = $this->database->getReference('attendance/' . $roomCode)->getValue() ?? [];
         $students = $this->database->getReference('users')->getValue() ?? [];
-        
+
         return view('instructor.attendance', [
             'room' => $room,
-            'qrCode' => $qrCode,
             'attendance' => $attendance,
-            'students' => $students
+            'students' => $students,
+            'roomCode' => $roomCode
         ]);
     }
 }

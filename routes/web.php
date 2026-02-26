@@ -4,6 +4,7 @@ use App\Http\Controllers\FirebaseController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
 
 Route::get('/', function () {
     if (session('user')) {
@@ -38,6 +39,6 @@ Route::middleware('student')->group(function () {
     Route::get('/student/join-room', [StudentController::class, 'showJoinRoomForm']);
     Route::post('/student/join-room', [StudentController::class, 'joinRoom']);
     Route::get('/student/room/{roomCode}', [StudentController::class, 'show']);
-    Route::get('/student/scan', [StudentController::class, 'showScan']);
-    Route::post('/student/scan', [StudentController::class, 'scan']);
 });
+
+Route::post('/api/attendance', [ApiController::class, 'markAttendance']);
