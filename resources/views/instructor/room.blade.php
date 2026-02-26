@@ -3,9 +3,9 @@
 @section('content')
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-4 md:p-8 bg-white shadow-md rounded-lg mx-auto">
-        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6">
-            <h2 class="text-3xl font-bold mb-4 sm:mb-0 text-center sm:text-left">Room Details</h2>
-            <a href="/instructor/dashboard" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full sm:w-auto text-center">Back to Dashboard</a>
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
+            <h2 class="text-3xl font-bold mb-4 md:mb-0 text-center md:text-left">Room Details</h2>
+            <a href="/instructor/dashboard" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center">Back to Dashboard</a>
         </div>
 
         <div class="mb-8 bg-gray-50 p-6 rounded-lg">
