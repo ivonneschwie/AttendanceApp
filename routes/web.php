@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\FirebaseController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,12 +20,24 @@ Route::get('/onboarding', [FirebaseController::class, 'onboarding']);
 Route::post('/onboarding', [FirebaseController::class, 'storeOnboardingData']);
 Route::get('/qrcode', [FirebaseController::class, 'qrcode']);
 
-Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
+Route::middleware('admin')->group(function () {
     Route::get('/admin/dashboard', [FirebaseController::class, 'adminDashboard']);
     Route::get('/admin/register-instructor', [FirebaseController::class, 'showRegisterInstructorForm']);
     Route::post('/admin/register-instructor', [FirebaseController::class, 'registerInstructor']);
 });
 
-Route::middleware(\App\Http\Middleware\InstructorMiddleware::class)->group(function () {
+Route::middleware('instructor')->group(function () {
     Route::get('/instructor/dashboard', [FirebaseController::class, 'instructorDashboard']);
+    Route::get('/instructor/create-room', [RoomController::class, 'create']);
+    Route::post('/instructor/create-room', [RoomController::class, 'store']);
+    Route::get('/instructor/room/{roomCode}', [RoomController::class, 'show']);
+    Route::get('/instructor/room/{roomCode}/attendance', [RoomController::class, 'showAttendance']);
+});
+
+Route::middleware('student')->group(function () {
+    Route::get('/student/join-room', [StudentController::class, 'showJoinRoomForm']);
+    Route::post('/student/join-room', [StudentController::class, 'joinRoom']);
+    Route::get('/student/room/{roomCode}', [StudentController::class, 'show']);
+    Route::get('/student/scan', [StudentController::class, 'showScan']);
+    Route::post('/student/scan', [StudentController::class, 'scan']);
 });

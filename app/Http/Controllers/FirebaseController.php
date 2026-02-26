@@ -84,10 +84,23 @@ class FirebaseController extends Controller
             if ($userType === 'instructor') {
                 return redirect('/instructor/dashboard');
             }
+
             $userName = session('user_name');
             $userUid = session('user_uid');
-            $qrCode = QrCode::size(200)->generate($userUid);
-            return view('dashboard', ['userName' => $userName, 'qrCode' => $qrCode]);
+
+            $allRooms = $this->database->getReference('rooms')->getValue() ?? [];
+            $joinedRooms = [];
+
+            foreach ($allRooms as $roomCode => $room) {
+                if (isset($room['students']) && array_key_exists($userUid, $room['students'])) {
+                    $joinedRooms[$roomCode] = $room;
+                }
+            }
+
+            return view('student.dashboard', [
+                'userName' => $userName,
+                'rooms' => $joinedRooms
+            ]);
         } else {
             return redirect('/');
         }
@@ -105,12 +118,21 @@ class FirebaseController extends Controller
 
     public function instructorDashboard()
     {
-        if (session('user_type') === 'instructor' || session('user_type') === 'admin') {
-            $users = $this->database->getReference('users')->getValue();
-            return view('instructor.dashboard', ['users' => $users]);
-        } else {
+        if (session('user_type') !== 'instructor' && session('user_type') !== 'admin') {
             return redirect('/');
         }
+
+        $instructorUid = session('user_uid');
+        $allRooms = $this->database->getReference('rooms')->getValue() ?? [];
+        $rooms = [];
+
+        foreach ($allRooms as $roomCode => $room) {
+            if ($room['instructorUid'] === $instructorUid) {
+                $rooms[$roomCode] = $room;
+            }
+        }
+
+        return view('instructor.dashboard', ['rooms' => $rooms]);
     }
 
 
