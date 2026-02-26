@@ -26,8 +26,15 @@ class ApiController extends Controller
         $roomCode = $request->roomCode;
         $listId = $request->listId;
 
+        $roomStudentsRef = $this->database->getReference('rooms/' . $roomCode . '/students/');
+        $roomStudents = $roomStudentsRef->getValue();
+
+        if (!isset($roomStudents[$studentUid])) {
+            return response()->json(['success' => false, 'message' => 'Invalid student']);
+        }
+        
         $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/students/' . $studentUid)->set(time());
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'Successfully scanned']);
     }
 }

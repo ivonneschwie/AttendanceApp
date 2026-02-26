@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div id="notification-container" class="fixed top-5 right-5 z-50"></div>
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-6 md:p-8 bg-white shadow-lg rounded-xl mx-auto">
         <!-- Header -->
@@ -120,6 +121,18 @@
 <script src="https://unpkg.com/html5-qrcode"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const notificationContainer = document.getElementById('notification-container');
+
+        function showNotification(message, isSuccess) {
+            const notification = document.createElement('div');
+            notification.className = `p-4 rounded-md shadow-lg text-white ${isSuccess ? 'bg-green-500' : 'bg-red-500'}`;
+            notification.textContent = message;
+            notificationContainer.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
         // Edit Modal Logic
         const editButton = document.getElementById('edit-button');
         const editModal = document.getElementById('edit-modal');
@@ -137,8 +150,9 @@
             if (response.ok) {
                 listName.textContent = formData.get('name');
                 editModal.classList.add('hidden');
+                showNotification('Attendance list name updated successfully.', true);
             } else {
-                alert('Failed to update attendance list name.');
+                showNotification('Failed to update attendance list name.', false);
             }
         });
 
@@ -172,18 +186,18 @@
                     })
                     .then(response => response.json())
                     .then(data => {
+                        showNotification(data.message, data.success);
                         if (data.success) {
-                            alert('Attendance marked successfully!');
-                            location.reload();
-                        } else {
-                            alert('Failed to mark attendance: ' + data.message);
+                            setTimeout(() => location.reload(), 1000);
                         }
-                    }).catch(error => alert('An error occurred. Please try again.'));
+                    }).catch(error => {
+                        showNotification('An error occurred. Please try again.', false);
+                    });
                 },
                 (errorMessage) => { /* ignore */ }
             ).catch((err) => {
                 scanButton.textContent = 'Start Scanner';
-                console.error(`Unable to start scanning, error code: ${err}`)
+                showNotification('Unable to start scanner.', false);
             });
         });
     });
