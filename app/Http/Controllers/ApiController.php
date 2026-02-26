@@ -19,12 +19,14 @@ class ApiController extends Controller
         $request->validate([
             'studentUid' => 'required|string',
             'roomCode' => 'required|string',
+            'listId' => 'required|string',
         ]);
 
         $studentUid = $request->studentUid;
         $roomCode = $request->roomCode;
+        $listId = $request->listId;
 
-        $this->database->getReference('attendance/' . $roomCode . '/' . $studentUid)->set(time());
+        $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/students/' . $studentUid)->set(time());
 
         return response()->json(['success' => true]);
     }

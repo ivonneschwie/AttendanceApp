@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\FirebaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Carbon\Carbon;
 
 class RoomController extends Controller
 {
@@ -60,14 +60,29 @@ class RoomController extends Controller
             }
         }
 
+        $attendanceLists = $this->database->getReference('attendance/' . $roomCode)->getValue() ?? [];
+
         return view('instructor.room', [
             'room' => $room,
             'roomCode' => $roomCode,
-            'students' => $students
+            'students' => $students,
+            'attendanceLists' => $attendanceLists
         ]);
     }
 
-    public function showAttendance($roomCode)
+    public function createAttendanceList(Request $request, $roomCode)
+    {
+        $listId = Str::random(10);
+        $date = Carbon::now()->toDateString();
+
+        $this->database->getReference('attendance/' . $roomCode . '/' . $listId)->set([
+            'name' => $date,
+        ]);
+
+        return redirect('/instructor/room/' . $roomCode . '/attendance/' . $listId)->with('success', 'Attendance list created successfully!');
+    }
+
+    public function showAttendance($roomCode, $listId)
     {
         $room = $this->database->getReference('rooms/' . $roomCode)->getValue();
 
@@ -75,14 +90,36 @@ class RoomController extends Controller
             abort(403);
         }
 
-        $attendance = $this->database->getReference('attendance/' . $roomCode)->getValue() ?? [];
+        $attendanceList = $this->database->getReference('attendance/' . $roomCode . '/' . $listId)->getValue();
         $students = $this->database->getReference('users')->getValue() ?? [];
+        $attendance = $attendanceList['students'] ?? [];
 
         return view('instructor.attendance', [
             'room' => $room,
             'attendance' => $attendance,
             'students' => $students,
-            'roomCode' => $roomCode
+            'roomCode' => $roomCode,
+            'listId' => $listId,
+            'listName' => $attendanceList['name']
         ]);
+    }
+
+    public function updateAttendanceName(Request $request, $roomCode, $listId)
+    {
+        $request->validate([
+            'name' => 'required|string',
+        ]);
+
+        $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/name')
+            ->set($request->name);
+
+        return redirect('/instructor/room/' . $roomCode . '/attendance/' . $listId)->with('success', 'Attendance list name updated successfully!');
+    }
+
+    public function deleteAttendanceList($roomCode, $listId)
+    {
+        $this->database->getReference('attendance/' . $roomCode . '/' . $listId)->remove();
+
+        return redirect('/instructor/room/' . $roomCode)->with('success', 'Attendance list deleted successfully!');
     }
 }

@@ -32,7 +32,10 @@ Route::middleware('instructor')->group(function () {
     Route::get('/instructor/create-room', [RoomController::class, 'create']);
     Route::post('/instructor/create-room', [RoomController::class, 'store']);
     Route::get('/instructor/room/{roomCode}', [RoomController::class, 'show']);
-    Route::get('/instructor/room/{roomCode}/attendance', [RoomController::class, 'showAttendance']);
+    Route::post('/instructor/room/{roomCode}/attendance', [RoomController::class, 'createAttendanceList']);
+    Route::get('/instructor/room/{roomCode}/attendance/{listId}', [RoomController::class, 'showAttendance']);
+    Route::post('/instructor/room/{roomCode}/attendance/{listId}/update', [RoomController::class, 'updateAttendanceName']);
+    Route::post('/instructor/room/{roomCode}/attendance/{listId}/delete', [RoomController::class, 'deleteAttendanceList']);
 });
 
 Route::middleware('student')->group(function () {
