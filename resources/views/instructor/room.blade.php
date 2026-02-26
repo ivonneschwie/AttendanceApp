@@ -29,23 +29,17 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-700">
-                    @if(isset($room['students']) && is_array($room['students']))
-                        @forelse($room['students'] as $studentId => $student)
-                            <tr>
-                                <td class="py-3 px-4">{{ $student['firstName'] }}</td>
-                                <td class="py-3 px-4">{{ $student['lastName'] }}</td>
-                                <td class="py-3 px-4">{{ $student['schoolId'] }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="py-3 px-4 text-center">No students have joined this room yet.</td>
-                            </tr>
-                        @endforelse
-                    @else
+                    @forelse($students as $student)
+                        <tr>
+                            <td class="py-3 px-4">{{ $student['firstName'] }}</td>
+                            <td class="py-3 px-4">{{ $student['lastName'] }}</td>
+                            <td class="py-3 px-4">{{ $student['schoolId'] }}</td>
+                        </tr>
+                    @empty
                         <tr>
                             <td colspan="3" class="py-3 px-4 text-center">No students have joined this room yet.</td>
                         </tr>
-                    @endif
+                    @endforelse
                 </tbody>
             </table>
         </div>

@@ -50,7 +50,21 @@ class RoomController extends Controller
             abort(403);
         }
 
-        return view('instructor.room', ['room' => $room, 'roomCode' => $roomCode]);
+        $students = [];
+        if (isset($room['students'])) {
+            $allUsers = $this->database->getReference('users')->getValue() ?? [];
+            foreach ($room['students'] as $studentId => $value) {
+                if (isset($allUsers[$studentId])) {
+                    $students[$studentId] = $allUsers[$studentId];
+                }
+            }
+        }
+
+        return view('instructor.room', [
+            'room' => $room,
+            'roomCode' => $roomCode,
+            'students' => $students
+        ]);
     }
 
     public function showAttendance($roomCode)
