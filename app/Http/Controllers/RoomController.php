@@ -24,18 +24,18 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'section' => 'required|string',
             'subject' => 'required|string',
+            'section' => 'required|string',
+            'subject_code' => 'required|string',
         ]);
 
         $roomCode = Str::random(6);
         $instructorUid = session('user_uid');
 
         $this->database->getReference('rooms/' . $roomCode)->set([
-            'name' => $request->name,
+            'name' => $request->subject,
             'section' => $request->section,
-            'subject' => $request->subject,
+            'subject' => $request->subject_code,
             'instructorUid' => $instructorUid,
         ]);
 

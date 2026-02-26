@@ -11,9 +11,9 @@
         <div class="mb-8 bg-gray-50 p-6 rounded-lg">
             <h3 class="text-2xl font-bold mb-4 border-b pb-2">Room Information</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p class="text-lg"><span class="font-semibold">Name:</span> {{ $room['name'] }}</p>
+                <p class="text-lg"><span class="font-semibold">Subject:</span> {{ $room['name'] }}</p>
                 <p class="text-lg"><span class="font-semibold">Section:</span> {{ $room['section'] }}</p>
-                <p class="text-lg"><span class="font-semibold">Subject:</span> {{ $room['subject'] }}</p>
+                <p class="text-lg"><span class="font-semibold">Subject Code:</span> {{ $room['subject'] }}</p>
                 <p class="text-lg"><span class="font-semibold">Room Code:</span> <span class="font-mono bg-gray-200 px-2 py-1 rounded">{{ $roomCode }}</span></p>
             </div>
         </div>

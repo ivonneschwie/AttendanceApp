@@ -16,7 +16,8 @@
             <table class="min-w-full bg-white border border-gray-200">
                 <thead>
                     <tr class="w-full bg-gray-200 text-left text-sm font-semibold text-gray-700">
-                        <th class="py-3 px-4">Room Name</th>
+                        <th class="py-3 px-4">Subject</th>
+                        <th class="py-3 px-4">Subject Code</th>
                         <th class="py-3 px-4">Room Code</th>
                         <th class="py-3 px-4">Actions</th>
                     </tr>
@@ -25,6 +26,7 @@
                     @forelse($rooms as $roomCode => $room)
                         <tr class="border-b border-gray-200">
                             <td class="py-3 px-4 whitespace-nowrap">{{ $room['name'] }}</td>
+                            <td class="py-3 px-4 whitespace-nowrap">{{ $room['subject'] }}</td>
                             <td class="py-3 px-4 whitespace-nowrap">{{ $roomCode }}</td>
                             <td class="py-3 px-4 whitespace-nowrap">
                                 <a href="/instructor/room/{{ $roomCode }}" class="text-blue-500 hover:text-blue-700">View</a>
@@ -32,7 +34,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="py-3 px-4 text-center">You haven't created any rooms yet.</td>
+                            <td colspan="4" class="py-3 px-4 text-center">You haven't created any rooms yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

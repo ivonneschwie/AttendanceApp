@@ -9,8 +9,8 @@
             @csrf
 
             <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                <input type="text" id="name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <label for="subject" class="block text-gray-700 text-sm font-bold mb-2">Subject</label>
+                <input type="text" id="subject" name="subject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
             </div>
 
             <div class="mb-4">
@@ -19,8 +19,8 @@
             </div>
 
             <div class="mb-4">
-                <label for="subject" class="block text-gray-700 text-sm font-bold mb-2">Subject</label>
-                <input type="text" id="subject" name="subject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                <label for="subject_code" class="block text-gray-700 text-sm font-bold mb-2">Subject Code</label>
+                <input type="text" id="subject_code" name="subject_code" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
             </div>
 
             <div class="flex items-center justify-between">

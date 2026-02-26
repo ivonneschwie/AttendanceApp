@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="notification-container" class="fixed top-5 right-5 z-50"></div>
+<div id="notification-container" class="fixed top-5 left-5 right-5 z-50"></div>
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-6 md:p-8 bg-white shadow-lg rounded-xl mx-auto">
         <!-- Header -->
