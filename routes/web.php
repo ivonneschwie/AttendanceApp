@@ -47,6 +47,7 @@ Route::middleware('instructor')->group(function () {
     Route::post('/instructor/event/{eventId}/attendance', [EventController::class, 'createAttendanceList']);
     Route::delete('/instructor/event/{eventId}/delete', [EventController::class, 'delete']);
     Route::post('/instructor/event/{eventId}/update', [EventController::class, 'update']);
+    Route::delete('/instructor/event/{eventId}/student/{studentUid}/remove', [EventController::class, 'removeStudent']);
 });
 
 Route::middleware('student')->group(function () {

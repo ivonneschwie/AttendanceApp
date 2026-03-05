@@ -31,10 +31,12 @@ class EventController extends Controller
         $eventRef->set([
             'name' => $eventName,
             'instructorUid' => session('user_uid'),
-            'createdAt' => now()->toDateTimeString(),
+            'createdAt' => now()->toDateString(),
         ]);
 
-        return redirect('/instructor/events');
+        $eventId = $eventRef->getKey();
+
+        return redirect('/instructor/event/' . $eventId . '/scan');
     }
 
     public function index()
@@ -100,12 +102,20 @@ class EventController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
+            'createdAt' => 'required|string',
         ]);
 
         $this->database->getReference('events/' . $eventId)->update([
             'name' => $request->name,
+            'createdAt' => $request->createdAt,
         ]);
 
         return redirect('/instructor/event/' . $eventId . '/scan')->with('success', 'Event updated successfully.');
+    }
+
+    public function removeStudent($eventId, $studentUid)
+    {
+        $this->database->getReference('event-attendance/' . $eventId . '/students/' . $studentUid)->remove();
+        return back()->with('success', 'Student removed successfully.');
     }
 }
