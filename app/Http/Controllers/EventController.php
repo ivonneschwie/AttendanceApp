@@ -31,6 +31,7 @@ class EventController extends Controller
         $eventRef->set([
             'name' => $eventName,
             'instructorUid' => session('user_uid'),
+            'createdAt' => now()->toDateTimeString(),
         ]);
 
         return redirect('/instructor/events');

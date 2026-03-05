@@ -8,7 +8,7 @@
         <div class="flex justify-between items-center mb-6 border-b pb-4">
             <div class="min-w-0">
                 <h2 class="text-3xl font-bold text-gray-800 truncate">{{ $event['name'] }}</h2>
-                <p id="list-name" class="text-lg text-gray-600 truncate">Attendance Scanner</p>
+                <p id="list-name" class="text-lg text-gray-600 truncate">{{ isset($event['createdAt']) ? \Carbon\Carbon::parse($event['createdAt'])->format('F j, Y') : 'Attendance Scanner' }}</p>
             </div>
             <div class="flex-shrink-0 flex items-center space-x-2 ml-4">
                 <button id="edit-event-button" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition">
