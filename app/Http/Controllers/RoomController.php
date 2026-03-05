@@ -122,4 +122,11 @@ class RoomController extends Controller
 
         return redirect('/instructor/room/' . $roomCode)->with('success', 'Attendance list deleted successfully!');
     }
+
+    public function deleteAttendanceEntry($roomCode, $listId, $entryId)
+    {
+        $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/students/' . $entryId)->remove();
+
+        return redirect('/instructor/room/' . $roomCode . '/attendance/' . $listId)->with('success', 'Attendance entry deleted successfully!');
+    }
 }

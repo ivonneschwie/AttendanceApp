@@ -39,16 +39,25 @@
                 <ul class="divide-y divide-gray-200">
                     @foreach ($attendance as $studentUid => $timestamp)
                         <li class="p-4 flex flex-col md:flex-row justify-between items-start md:items-center hover:bg-gray-50 transition">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                    <span class="font-bold text-gray-600">{{ substr($students[$studentUid]['firstName'], 0, 1) }}{{ substr($students[$studentUid]['lastName'], 0, 1) }}</span>
+                            <div class="flex flex-col md:flex-row md:items-center">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                        <span class="font-bold text-gray-600">{{ substr($students[$studentUid]['firstName'], 0, 1) }}{{ substr($students[$studentUid]['lastName'], 0, 1) }}</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
+                                        <p class="text-sm text-gray-500">ID: {{ $students[$studentUid]['schoolId'] }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
-                                    <p class="text-sm text-gray-500">ID: {{ $students[$studentUid]['schoolId'] }}</p>
-                                </div>
+                                <span class="text-sm text-gray-600 mt-2 md:mt-0 md:ml-4">{{ date('F j, Y, g:i a', $timestamp / 1000) }}</span>
                             </div>
-                            <span class="text-sm text-gray-600 mt-2 md:mt-0">{{ date('F j, Y, g:i a', $timestamp / 1000) }}</span>
+                            <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="mt-2 md:mt-0">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-500 hover:text-red-700 p-2 rounded-full transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </form>
                         </li>
                     @endforeach
                 </ul>
