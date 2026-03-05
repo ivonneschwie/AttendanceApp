@@ -5,7 +5,10 @@
     <div class="w-full max-w-4xl p-4 md:p-8 bg-white shadow-md rounded-lg mx-auto">
         <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
             <h2 class="text-3xl font-bold mb-4 md:mb-0 text-center md:text-left">Events</h2>
-            <a href="/instructor/create-event" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center">Create Event</a>
+            <div class="flex flex-col-reverse w-full md:w-auto md:flex-row">
+                <a href="/instructor/create-event" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center md:mr-2">Create Event</a>
+                <a href="/instructor/dashboard" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center mb-2 md:mb-0">Back to Dashboard</a>
+            </div>
         </div>
 
         <div class="overflow-x-auto">
@@ -13,16 +16,15 @@
                 <thead>
                     <tr class="w-full bg-gray-200 text-left text-sm font-semibold text-gray-700">
                         <th class="py-3 px-4">Name</th>
-                        <th class="py-3 px-4">Actions</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700">
                     @forelse($events as $eventId => $event)
                         <tr class="border-b border-gray-200">
                             <td class="py-3 px-4 whitespace-nowrap">{{ $event['name'] }}</td>
-                            <td class="py-3 px-4 whitespace-nowrap">
-                                <a href="/instructor/event/{{ $eventId }}" class="text-blue-500 hover:text-blue-700 mr-4">View</a>
-                                <a href="/instructor/event/{{ $eventId }}/scan" class="text-green-500 hover:text-green-700">Scan QR</a>
+                            <td class="py-3 px-4 whitespace-nowrap text-right">
+                                <a href="/instructor/event/{{ $eventId }}" class="text-blue-500 hover:text-blue-700">View</a>
                             </td>
                         </tr>
                     @empty

@@ -10,7 +10,15 @@
                 <h2 class="text-3xl font-bold text-gray-800 truncate">{{ $event['name'] }}</h2>
                 <p id="list-name" class="text-lg text-gray-600 truncate">Attendance Scanner</p>
             </div>
-            <a href="/instructor/event/{{ $eventId }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-150 ease-in-out whitespace-nowrap">Back to Event</a>
+            <div class="flex-shrink-0 flex items-center space-x-2 ml-4">
+                <button id="edit-event-button" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+                <button id="delete-event-button" class="text-gray-500 hover:text-red-700 p-2 rounded-full transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+                <a href="/instructor/events" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-150 ease-in-out whitespace-nowrap">Back to Events</a>
+            </div>
         </div>
 
         <!-- QR Code Scanner -->
@@ -64,6 +72,64 @@
                     <p class="mt-1 text-sm text-gray-500">No students have marked their attendance yet.</p>
                 </div>
             @endif
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div id="edit-event-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center md:block md:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+        <span class="hidden md:inline-block md:align-middle md:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all md:my-8 md:align-middle md:max-w-lg md:w-full">
+            <form id="edit-event-form" action="/instructor/event/{{ $eventId }}/update" method="POST">
+                @csrf
+                <div class="bg-white px-4 pt-5 pb-4 md:p-6 md:pb-4">
+                    <div class="md:flex md:items-start">
+                        <div class="mt-3 text-center md:mt-0 md:ml-4 md:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Edit Event</h3>
+                            <div class="mt-2">
+                                <label for="name" class="block text-sm font-medium text-gray-700">Event Name</label>
+                                <input type="text" name="name" id="name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{ $event['name'] }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 md:px-6 md:flex md:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 md:ml-3 md:w-auto md:text-sm">Save</button>
+                    <button type="button" id="cancel-edit-event-button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:mt-0 md:w-auto md:text-sm">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+<div id="delete-event-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center md:block md:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+        <span class="hidden md:inline-block md:align-middle md:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all md:my-8 md:align-middle md:max-w-lg md:w-full">
+            <form id="delete-event-form" action="/instructor/event/{{ $eventId }}/delete" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="bg-white px-4 pt-5 pb-4 md:p-6 md:pb-4">
+                    <div class="md:flex md:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 md:mx-0 md:h-10 md:w-10">
+                            <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        </div>
+                        <div class="mt-3 text-center md:mt-0 md:ml-4 md:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Delete Event</h3>
+                            <p class="text-sm text-gray-500">Are you sure you want to delete the event "<span class="font-bold">{{ $event['name'] }}</span>"? This will also delete all associated attendance data. This action cannot be undone.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 md:px-6 md:flex md:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 md:ml-3 md:w-auto md:text-sm">Delete</button>
+                    <button type="button" id="cancel-delete-event-button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:mt-0 md:w-auto md:text-sm">Cancel</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -162,6 +228,32 @@
                     showNotification('Unable to start scanner. Please grant camera permissions.', false);
                 });
             }
+        });
+
+        // Edit Modal Logic
+        const editButton = document.getElementById('edit-event-button');
+        const editModal = document.getElementById('edit-event-modal');
+        const cancelEditButton = document.getElementById('cancel-edit-event-button');
+
+        editButton.addEventListener('click', () => {
+            editModal.classList.remove('hidden');
+        });
+
+        cancelEditButton.addEventListener('click', () => {
+            editModal.classList.add('hidden');
+        });
+
+        // Delete Modal Logic
+        const deleteButton = document.getElementById('delete-event-button');
+        const deleteModal = document.getElementById('delete-event-modal');
+        const cancelDeleteButton = document.getElementById('cancel-delete-event-button');
+
+        deleteButton.addEventListener('click', () => {
+            deleteModal.classList.remove('hidden');
+        });
+
+        cancelDeleteButton.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
         });
     });
 </script>
