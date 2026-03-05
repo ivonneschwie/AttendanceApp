@@ -16,6 +16,29 @@ class ApiController extends Controller
 
     public function markAttendance(Request $request)
     {
+        if ($request->has('event_id')) {
+            $request->validate([
+                'qr_code' => 'required|string',
+                'event_id' => 'required|string',
+            ]);
+    
+            $studentUid = $request->qr_code;
+            $eventId = $request->event_id;
+    
+            $student = $this->database->getReference('users/' . $studentUid)->getValue();
+    
+            if (!$student) {
+                return response()->json(['success' => false, 'message' => 'Invalid student QR code.']);
+            }
+    
+            $this->database->getReference('event_attendance/' . $eventId . '/' . $studentUid)->set([
+                'name' => $student['name'],
+                'timestamp' => round(microtime(true) * 1000)
+            ]);
+    
+            return response()->json(['success' => true, 'message' => 'Event attendance marked successfully.']);
+        }
+
         $request->validate([
             'studentUid' => 'required|string',
             'roomCode' => 'required|string',

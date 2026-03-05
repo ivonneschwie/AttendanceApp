@@ -7,6 +7,7 @@
             <h2 class="text-3xl font-bold mb-4 md:mb-0 text-center md:text-left">Welcome, Instructor!</h2>
             <div class="flex flex-col md:flex-row">
                 <a href="/instructor/create-room" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto mb-2 md:mb-0 md:mr-2 text-center">Create Room</a>
+                <a href="{{ route('events.index') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto mb-2 md:mb-0 md:mr-2 text-center">Events</a>
                 <a href="/logout" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center">Logout</a>
             </div>
         </div>
