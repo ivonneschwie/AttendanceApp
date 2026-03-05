@@ -21,7 +21,8 @@
                         <tr class="border-b border-gray-200">
                             <td class="py-3 px-4 whitespace-nowrap">{{ $event['name'] }}</td>
                             <td class="py-3 px-4 whitespace-nowrap">
-                                <a href="/instructor/event/{{ $eventId }}" class="text-blue-500 hover:text-blue-700">View</a>
+                                <a href="/instructor/event/{{ $eventId }}" class="text-blue-500 hover:text-blue-700 mr-4">View</a>
+                                <a href="/instructor/event/{{ $eventId }}/scan" class="text-green-500 hover:text-green-700">Scan QR</a>
                             </td>
                         </tr>
                     @empty

@@ -43,6 +43,7 @@ Route::middleware('instructor')->group(function () {
     Route::get('/instructor/create-event', [EventController::class, 'create']);
     Route::post('/instructor/create-event', [EventController::class, 'store']);
     Route::get('/instructor/event/{eventId}', [EventController::class, 'show']);
+    Route::get('/instructor/event/{eventId}/scan', [EventController::class, 'scan']);
     Route::post('/instructor/event/{eventId}/attendance', [EventController::class, 'createAttendanceList']);
 });
 

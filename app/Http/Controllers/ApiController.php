@@ -48,6 +48,13 @@ class ApiController extends Controller
         $studentUid = $request->studentUid;
         $eventId = $request->eventId;
 
+        $userRef = $this->database->getReference('users/' . $studentUid);
+        $user = $userRef->getValue();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Invalid student']);
+        }
+
         $this->database->getReference('event-attendance/' . $eventId . '/students/' . $studentUid)->set(time());
 
         return response()->json(['success' => true, 'message' => 'Successfully scanned']);

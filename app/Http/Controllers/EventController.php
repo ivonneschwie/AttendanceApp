@@ -30,7 +30,7 @@ class EventController extends Controller
         $eventRef = $this->database->getReference('events')->push();
         $eventRef->set([
             'name' => $eventName,
-            'instructorUid' => session('user')['uid'],
+            'instructorUid' => session('user_uid'),
         ]);
 
         return redirect('/instructor/events');
@@ -80,5 +80,30 @@ class EventController extends Controller
         ]);
 
         return redirect('/instructor/event/' . $eventId);
+    }
+
+    public function scan($eventId)
+    {
+        $event = $this->database->getReference('events/' . $eventId)->getValue();
+        $attendanceData = $this->database->getReference('event-attendance/' . $eventId . '/students')->getValue() ?? [];
+        
+        $studentUids = array_keys($attendanceData);
+        $students = [];
+
+        if(!empty($studentUids)) {
+            $users = $this->database->getReference('users')->getValue();
+            foreach($studentUids as $uid) {
+                if(isset($users[$uid])) {
+                    $students[$uid] = $users[$uid];
+                }
+            }
+        }
+        
+        return view('instructor.event-scan', [
+            'event' => $event,
+            'eventId' => $eventId,
+            'attendance' => $attendanceData,
+            'students' => $students
+        ]);
     }
 }
