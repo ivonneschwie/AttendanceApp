@@ -37,6 +37,7 @@ Route::middleware('instructor')->group(function () {
     Route::post('/instructor/room/{roomCode}/attendance/{listId}/update', [RoomController::class, 'updateAttendanceName']);
     Route::post('/instructor/room/{roomCode}/attendance/{listId}/delete', [RoomController::class, 'deleteAttendanceList']);
     Route::delete('/instructor/room/{roomCode}/attendance/{listId}/entry/{entryId}', [RoomController::class, 'deleteAttendanceEntry']);
+    Route::delete('/instructor/room/{roomCode}/student/{studentId}/remove', [RoomController::class, 'removeStudent']);
 });
 
 Route::middleware('student')->group(function () {

@@ -63,15 +63,17 @@
 
             <!-- Students Panel -->
             <div id="panel-students" class="hidden">
-                 <h3 class="text-2xl font-bold mb-4">Students in this Room</h3>
                 <div class="bg-white rounded-lg shadow-md">
                     <ul class="divide-y divide-gray-200">
                         @forelse($students as $studentId => $student)
-                             <li class="p-4 flex items-center justify-between hover:bg-gray-50 transition cursor-pointer student-entry" data-student-uid="{{ $studentId }}">
-                                <div>
+                             <li class="p-4 flex items-center justify-between hover:bg-gray-50 transition">
+                                <div class="flex-grow cursor-pointer student-entry" data-student-uid="{{ $studentId }}">
                                     <p class="font-semibold text-gray-800">{{ $student['firstName'] }} {{ $student['lastName'] }}</p>
                                     <p class="text-sm text-gray-500">ID: {{ $student['schoolId'] }}</p>
                                 </div>
+                                <button class="text-red-500 hover:text-red-700 p-2 rounded-full transition remove-student-btn" data-student-id="{{ $studentId }}" data-student-name="{{ $student['firstName'] }} {{ $student['lastName'] }}">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
                             </li>
                         @empty
                             <li class="p-4 text-center text-gray-500">No students have joined this room yet.</li>
@@ -84,6 +86,35 @@
 </div>
 
 @include('partials.student-details-modal')
+
+<!-- Remove Student Confirmation Modal -->
+<div id="remove-student-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center md:block md:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+        <span class="hidden md:inline-block md:align-middle md:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all md:my-8 md:align-middle md:max-w-lg md:w-full">
+            <form id="remove-student-form" action="" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="bg-white px-4 pt-5 pb-4 md:p-6 md:pb-4">
+                    <div class="md:flex md:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 md:mx-0 md:h-10 md:w-10">
+                            <svg class="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        </div>
+                        <div class="mt-3 text-center md:mt-0 md:ml-4 md:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Remove Student</h3>
+                            <p class="text-sm text-gray-500">Are you sure you want to remove <strong id="student-name-to-remove"></strong>? This will remove them from the room and they will need to join again.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 md:px-6 md:flex md:flex-row-reverse">
+                    <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 md:ml-3 md:w-auto md:text-sm">Remove</button>
+                    <button type="button" id="cancel-remove-student-button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 md:mt-0 md:w-auto md:text-sm">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script src="{{ asset('js/StudentDetailsModal.js') }}"></script>
@@ -124,6 +155,28 @@
 
         attendanceTab.addEventListener('click', showAttendanceTab);
         studentsTab.addEventListener('click', showStudentsTab);
+
+        // Remove student modal
+        const removeStudentModal = document.getElementById('remove-student-modal');
+        const removeStudentForm = document.getElementById('remove-student-form');
+        const cancelRemoveStudentButton = document.getElementById('cancel-remove-student-button');
+        const studentNameToRemove = document.getElementById('student-name-to-remove');
+        const removeStudentButtons = document.querySelectorAll('.remove-student-btn');
+
+        removeStudentButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const studentId = button.dataset.studentId;
+                const studentName = button.dataset.studentName;
+                
+                studentNameToRemove.textContent = studentName;
+                removeStudentForm.action = `/instructor/room/{{ $roomCode }}/student/${studentId}/remove`;
+                removeStudentModal.classList.remove('hidden');
+            });
+        });
+
+        cancelRemoveStudentButton.addEventListener('click', () => {
+            removeStudentModal.classList.add('hidden');
+        });
     });
 </script>
 @endsection

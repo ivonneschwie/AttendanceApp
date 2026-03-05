@@ -188,35 +188,66 @@
         // Scanner Logic
         const scanButton = document.getElementById('scan-qr-btn');
         const reader = new Html5Qrcode("reader");
+        let isScanning = false;
+
+        const onScanSuccess = (decodedText, decodedResult) => {
+            if (!isScanning) return;
+
+            isScanning = false;
+            reader.stop().then(() => {
+                scanButton.textContent = 'Start Scanner';
+                scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
+                scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                fetch('/api/attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    body: JSON.stringify({ studentUid: decodedText, roomCode: "{{ $roomCode }}", listId: "{{ $listId }}" })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success);
+                    if (data.success) {
+                        setTimeout(() => location.reload(), 1000);
+                    }
+                }).catch(error => {
+                    showNotification('An error occurred. Please try again.', false);
+                });
+            });
+        };
+
+        const onScanFailure = (error) => {};
 
         scanButton.addEventListener('click', () => {
-            scanButton.textContent = 'Scanning...';
-            reader.start(
-                { facingMode: "environment" }, 
-                { fps: 10, qrbox: 250 },
-                (decodedText, decodedResult) => {
-                    reader.stop();
+            if (isScanning) {
+                isScanning = false;
+                reader.stop().then(() => {
                     scanButton.textContent = 'Start Scanner';
-                    fetch('/api/attendance', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                        body: JSON.stringify({ studentUid: decodedText, roomCode: "{{ $roomCode }}", listId: "{{ $listId }}" })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        showNotification(data.message, data.success);
-                        if (data.success) {
-                            setTimeout(() => location.reload(), 1000);
-                        }
-                    }).catch(error => {
-                        showNotification('An error occurred. Please try again.', false);
-                    });
-                },
-                (errorMessage) => { /* ignore */ }
-            ).catch((err) => {
-                scanButton.textContent = 'Start Scanner';
-                showNotification('Unable to start scanner.', false);
-            });
+                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
+                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                }).catch(err => {
+                    console.error("Error stopping the scanner manually:", err);
+                    scanButton.textContent = 'Start Scanner';
+                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
+                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                });
+            } else {
+                isScanning = true;
+                scanButton.textContent = 'Stop Scanner';
+                scanButton.classList.remove('bg-green-500', 'hover:bg-green-600');
+                scanButton.classList.add('bg-red-400', 'hover:bg-red-500');
+                reader.start(
+                    { facingMode: "environment" },
+                    { fps: 10, qrbox: 250 },
+                    onScanSuccess,
+                    onScanFailure
+                ).catch((err) => {
+                    isScanning = false;
+                    scanButton.textContent = 'Start Scanner';
+                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
+                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                    showNotification('Unable to start scanner.', false);
+                });
+            }
         });
     });
 </script>
