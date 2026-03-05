@@ -38,8 +38,8 @@
             @if (count($attendance) > 0)
                 <ul class="divide-y divide-gray-200">
                     @foreach ($attendance as $studentUid => $timestamp)
-                        <li class="p-4 flex flex-col md:flex-row justify-between items-start md:items-center hover:bg-gray-50 transition">
-                            <div class="flex flex-col md:flex-row md:items-center">
+                        <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
+                            <div class="flex flex-col sm:flex-row sm:items-center">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
                                         <span class="font-bold text-gray-600">{{ substr($students[$studentUid]['firstName'], 0, 1) }}{{ substr($students[$studentUid]['lastName'], 0, 1) }}</span>
@@ -49,9 +49,9 @@
                                         <p class="text-sm text-gray-500">ID: {{ $students[$studentUid]['schoolId'] }}</p>
                                     </div>
                                 </div>
-                                <span class="text-sm text-gray-600 mt-2 md:mt-0 md:ml-4">{{ date('F j, Y, g:i a', $timestamp / 1000) }}</span>
+                                <span class="text-sm text-gray-600 mt-2 sm:mt-0 sm:ml-4">{{ date('F j, Y, g:i a', $timestamp / 1000) }}</span>
                             </div>
-                            <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="mt-2 md:mt-0">
+                            <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-500 hover:text-red-700 p-2 rounded-full transition">
