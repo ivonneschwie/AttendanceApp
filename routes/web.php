@@ -5,6 +5,7 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\EventController;
 
 Route::get('/', function () {
     if (session('user')) {
@@ -38,6 +39,11 @@ Route::middleware('instructor')->group(function () {
     Route::post('/instructor/room/{roomCode}/attendance/{listId}/delete', [RoomController::class, 'deleteAttendanceList']);
     Route::delete('/instructor/room/{roomCode}/attendance/{listId}/entry/{entryId}', [RoomController::class, 'deleteAttendanceEntry']);
     Route::delete('/instructor/room/{roomCode}/student/{studentId}/remove', [RoomController::class, 'removeStudent']);
+    Route::get('/instructor/events', [EventController::class, 'index']);
+    Route::get('/instructor/create-event', [EventController::class, 'create']);
+    Route::post('/instructor/create-event', [EventController::class, 'store']);
+    Route::get('/instructor/event/{eventId}', [EventController::class, 'show']);
+    Route::post('/instructor/event/{eventId}/attendance', [EventController::class, 'createAttendanceList']);
 });
 
 Route::middleware('student')->group(function () {
@@ -47,3 +53,4 @@ Route::middleware('student')->group(function () {
 });
 
 Route::post('/api/attendance', [ApiController::class, 'markAttendance']);
+Route::post('/api/event-attendance', [ApiController::class, 'markEventAttendance']);

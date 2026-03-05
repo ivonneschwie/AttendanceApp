@@ -37,4 +37,19 @@ class ApiController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Successfully scanned']);
     }
+
+    public function markEventAttendance(Request $request)
+    {
+        $request->validate([
+            'studentUid' => 'required|string',
+            'eventId' => 'required|string',
+        ]);
+
+        $studentUid = $request->studentUid;
+        $eventId = $request->eventId;
+
+        $this->database->getReference('event-attendance/' . $eventId . '/students/' . $studentUid)->set(time());
+
+        return response()->json(['success' => true, 'message' => 'Successfully scanned']);
+    }
 }
