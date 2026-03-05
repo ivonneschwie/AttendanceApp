@@ -38,7 +38,7 @@
             @if (count($attendance) > 0)
                 <ul class="divide-y divide-gray-200">
                     @foreach ($attendance as $studentUid => $timestamp)
-                        <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
+                        <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition cursor-pointer student-entry" data-student-uid="{{ $studentUid }}">
                             <div class="flex flex-col sm:flex-row sm:items-center">
                                 <div class="flex items-center space-x-4">
                                     <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
@@ -127,7 +127,11 @@
     </div>
 </div>
 
+@include('partials.student-details-modal')
+
 <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="{{ asset('js/StudentDetailsModal.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const notificationContainer = document.getElementById('notification-container');
@@ -175,6 +179,11 @@
             deleteModal.classList.remove('hidden');
         });
         cancelDeleteButton.addEventListener('click', () => deleteModal.classList.add('hidden'));
+
+        // Student Details Modal Logic
+        const students = @json($students);
+        const studentDetailsModal = new StudentDetailsModal('student-details-modal', students);
+        studentDetailsModal.initializeTriggers('.student-entry');
 
         // Scanner Logic
         const scanButton = document.getElementById('scan-qr-btn');

@@ -48,8 +48,8 @@
                 <h3 class="text-2xl font-bold mb-4">Students in this Room</h3>
                 <div class="bg-white rounded-lg shadow-md">
                     <ul class="divide-y divide-gray-200">
-                        @forelse($students as $student)
-                             <li class="p-4 flex items-center justify-between hover:bg-gray-50 transition">
+                        @forelse($students as $studentId => $student)
+                             <li class="p-4 flex items-center justify-between hover:bg-gray-50 transition cursor-pointer student-entry" data-student-uid="{{ $studentId }}">
                                 <div>
                                     <p class="font-semibold text-gray-800">{{ $student['firstName'] }} {{ $student['lastName'] }}</p>
                                     <p class="text-sm text-gray-500">ID: {{ $student['schoolId'] }}</p>
@@ -64,4 +64,16 @@
         </div>
     </div>
 </div>
+
+@include('partials.student-details-modal')
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="{{ asset('js/StudentDetailsModal.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const students = @json($students);
+        const studentDetailsModal = new StudentDetailsModal('student-details-modal', students);
+        studentDetailsModal.initializeTriggers('.student-entry');
+    });
+</script>
 @endsection
