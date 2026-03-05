@@ -3,12 +3,13 @@
 @section('content')
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-4 md:p-8 bg-white shadow-md rounded-lg mx-auto">
+        <a href="/instructor/dashboard" class="inline-flex items-center text-gray-500 hover:text-gray-700 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            <span>Back to Dashboard</span>
+        </a>
         <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6">
             <h2 class="text-3xl font-bold mb-4 md:mb-0 text-center md:text-left">Events</h2>
-            <div class="flex flex-col-reverse w-full md:w-auto md:flex-row">
-                <a href="/instructor/create-event" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center md:mr-2">Create Event</a>
-                <a href="/instructor/dashboard" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center mb-2 md:mb-0">Back to Dashboard</a>
-            </div>
+            <a href="/instructor/create-event" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full md:w-auto text-center">Create Event</a>
         </div>
 
         <div class="overflow-x-auto">

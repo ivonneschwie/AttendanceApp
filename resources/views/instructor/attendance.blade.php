@@ -5,8 +5,12 @@
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-6 md:p-8 bg-white shadow-lg rounded-xl mx-auto">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
             <div class="min-w-0">
+                <a href="/instructor/room/{{ $roomCode }}" class="inline-flex items-center text-gray-500 hover:text-gray-700 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    <span>Room</span>
+                </a>
                 <h2 class="text-3xl font-bold text-gray-800 truncate">{{ $room['name'] }}</h2>
                 <p id="list-name" class="text-lg text-gray-600 truncate">{{ $listName }}</p>
             </div>
@@ -17,7 +21,6 @@
                 <button id="delete-button" class="text-gray-500 hover:text-red-700 p-2 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
-                <a href="/instructor/room/{{ $roomCode }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-150 ease-in-out whitespace-nowrap">Back to Room</a>
             </div>
         </div>
 

@@ -5,19 +5,22 @@
 <div class="flex flex-col justify-center min-h-screen bg-gray-100 px-4 py-8">
     <div class="w-full max-w-4xl p-6 md:p-8 bg-white shadow-lg rounded-xl mx-auto">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4">
             <div class="min-w-0">
+                <a href="/instructor/events" class="inline-flex items-center text-gray-500 hover:text-gray-700 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    <span>Events</span>
+                </a>
                 <h2 class="text-3xl font-bold text-gray-800 truncate">{{ $event['name'] }}</h2>
                 <p id="list-name" class="text-lg text-gray-600 truncate">{{ isset($event['createdAt']) ? \Carbon\Carbon::parse($event['createdAt'])->format('F j, Y') : 'Attendance Scanner' }}</p>
             </div>
-            <div class="flex-shrink-0 flex items-center space-x-2 ml-4">
+            <div class="flex items-center space-x-2 mt-4 md:mt-0">
                 <button id="edit-event-button" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </button>
                 <button id="delete-event-button" class="text-gray-500 hover:text-red-700 p-2 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
-                <a href="/instructor/events" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-150 ease-in-out whitespace-nowrap">Back to Events</a>
             </div>
         </div>
 
