@@ -5,7 +5,6 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\EventController;
 
 Route::get('/', function () {
     if (session('user')) {
@@ -39,13 +38,6 @@ Route::middleware('instructor')->group(function () {
     Route::post('/instructor/room/{roomCode}/attendance/{listId}/delete', [RoomController::class, 'deleteAttendanceList']);
     Route::delete('/instructor/room/{roomCode}/attendance/{listId}/entry/{entryId}', [RoomController::class, 'deleteAttendanceEntry']);
     Route::delete('/instructor/room/{roomCode}/student/{studentId}/remove', [RoomController::class, 'removeStudent']);
-
-    // Event Routes
-    Route::get('/events', [EventController::class, 'index'])->name('events.index');
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-    Route::get('/events/{event}/scan', [EventController::class, 'scan'])->name('events.scan');
 });
 
 Route::middleware('student')->group(function () {
