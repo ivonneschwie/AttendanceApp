@@ -18,8 +18,24 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
+        <!-- Tabs -->
+        <div>
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex" aria-label="Tabs">
+                    <button id="tab-attendance" class="w-1/2 text-center py-4 px-1 border-b-2 font-medium text-sm border-indigo-500 text-indigo-600">
+                        Attendance Lists
+                    </button>
+                    <button id="tab-students" class="w-1/2 text-center py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        Students
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Tab Panels -->
+        <div class="mt-6">
+            <!-- Attendance List Panel -->
+            <div id="panel-attendance">
                 <div class="flex flex-nowrap justify-between items-center mb-4">
                     <h3 class="text-2xl font-bold truncate">Attendance Lists</h3>
                     <div class="flex-shrink-0 ml-4">
@@ -44,8 +60,10 @@
                     </ul>
                 </div>
             </div>
-            <div>
-                <h3 class="text-2xl font-bold mb-4">Students in this Room</h3>
+
+            <!-- Students Panel -->
+            <div id="panel-students" class="hidden">
+                 <h3 class="text-2xl font-bold mb-4">Students in this Room</h3>
                 <div class="bg-white rounded-lg shadow-md">
                     <ul class="divide-y divide-gray-200">
                         @forelse($students as $studentId => $student)
@@ -74,6 +92,38 @@
         const students = @json($students);
         const studentDetailsModal = new StudentDetailsModal('student-details-modal', students);
         studentDetailsModal.initializeTriggers('.student-entry');
+
+        // Tab functionality
+        const attendanceTab = document.getElementById('tab-attendance');
+        const studentsTab = document.getElementById('tab-students');
+        const attendancePanel = document.getElementById('panel-attendance');
+        const studentsPanel = document.getElementById('panel-students');
+
+        const activeClasses = 'border-indigo-500 text-indigo-600';
+        const inactiveClasses = 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300';
+        
+        function showAttendanceTab() {
+            studentsTab.classList.remove(...activeClasses.split(' '));
+            studentsTab.classList.add(...inactiveClasses.split(' '));
+            attendanceTab.classList.add(...activeClasses.split(' '));
+            attendanceTab.classList.remove(...inactiveClasses.split(' '));
+            
+            studentsPanel.classList.add('hidden');
+            attendancePanel.classList.remove('hidden');
+        }
+
+        function showStudentsTab() {
+            attendanceTab.classList.remove(...activeClasses.split(' '));
+            attendanceTab.classList.add(...inactiveClasses.split(' '));
+            studentsTab.classList.add(...activeClasses.split(' '));
+            studentsTab.classList.remove(...inactiveClasses.split(' '));
+
+            attendancePanel.classList.add('hidden');
+            studentsPanel.classList.remove('hidden');
+        }
+
+        attendanceTab.addEventListener('click', showAttendanceTab);
+        studentsTab.addEventListener('click', showStudentsTab);
     });
 </script>
 @endsection
