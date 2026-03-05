@@ -22,11 +22,20 @@
         </div>
 
         <!-- QR Code Scanner -->
-        <div class="bg-gray-50 p-6 rounded-xl shadow mb-8">
-            <h3 class="text-xl font-bold mb-4 text-gray-700">Scan QR Code</h3>
+        <div class="bg-gray-50 p-6 rounded-2xl shadow-lg mb-8">
             <div class="flex flex-col items-center justify-center text-center">
-                <button id="scan-qr-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full focus:outline-none focus:shadow-outline text-lg transition duration-150 ease-in-out">Start Scanner</button>
-                <div id="reader" class="w-full max-w-xs mt-4 rounded-lg overflow-hidden"></div>
+                <div id="scanner-ui" class="w-[90%] max-w-xl mx-auto">
+                    <!-- Reader container -->
+                    <div id="reader-container" class="relative w-full aspect-square mx-auto rounded-2xl overflow-hidden hidden">
+                        <div id="reader" class="w-full h-full"></div>
+                    </div>
+                    <button id="scan-qr-btn" class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full focus:outline-none focus:ring-4 focus:ring-indigo-300 text-lg transition-all duration-300 ease-in-out transform hover:scale-105 shadow-md">
+                        <span id="scan-btn-text" class="flex items-center justify-center">
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m0 0v-4m0 4l-5-5"></path></svg>
+                            Start Scanner
+                        </span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -187,17 +196,22 @@
 
         // Scanner Logic
         const scanButton = document.getElementById('scan-qr-btn');
+        const scanButtonText = document.getElementById('scan-btn-text');
+        const readerContainer = document.getElementById('reader-container');
         const reader = new Html5Qrcode("reader");
         let isScanning = false;
 
         const onScanSuccess = (decodedText, decodedResult) => {
             if (!isScanning) return;
-
             isScanning = false;
+
             reader.stop().then(() => {
-                scanButton.textContent = 'Start Scanner';
-                scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
-                scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                readerContainer.classList.add('hidden');
+
+                scanButtonText.innerHTML = `<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m0 0v-4m0 4l-5-5"></path></svg> Start Scanner`;
+                scanButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+                scanButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+
                 fetch('/api/attendance', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
@@ -215,37 +229,39 @@
             });
         };
 
-        const onScanFailure = (error) => {};
+        const onScanFailure = (error) => { /* ignore */ };
 
+        const resetScannerUI = () => {
+            isScanning = false;
+            readerContainer.classList.add('hidden');
+            scanButtonText.innerHTML = `<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m0 0v-4m0 4l-5-5"></path></svg> Start Scanner`;
+            scanButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+            scanButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+        };
+        
         scanButton.addEventListener('click', () => {
             if (isScanning) {
-                isScanning = false;
                 reader.stop().then(() => {
-                    scanButton.textContent = 'Start Scanner';
-                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
-                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                    resetScannerUI();
                 }).catch(err => {
                     console.error("Error stopping the scanner manually:", err);
-                    scanButton.textContent = 'Start Scanner';
-                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
-                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
+                    resetScannerUI();
                 });
             } else {
                 isScanning = true;
-                scanButton.textContent = 'Stop Scanner';
-                scanButton.classList.remove('bg-green-500', 'hover:bg-green-600');
-                scanButton.classList.add('bg-red-400', 'hover:bg-red-500');
+                readerContainer.classList.remove('hidden');
+                scanButtonText.innerHTML = `<svg class="w-6 h-6 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v.01M12 20v.01M4 12h.01M20 12h.01M6.31 6.31l.01.01M17.69 17.69l.01.01M6.31 17.69l.01-.01M17.69 6.31l.01-.01" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg> Stop Scanner`;
+                scanButton.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                scanButton.classList.add('bg-red-500', 'hover:bg-red-600');
+                
                 reader.start(
                     { facingMode: "environment" },
-                    { fps: 10, qrbox: 250 },
+                    { fps: 10 },
                     onScanSuccess,
                     onScanFailure
                 ).catch((err) => {
-                    isScanning = false;
-                    scanButton.textContent = 'Start Scanner';
-                    scanButton.classList.remove('bg-red-400', 'hover:bg-red-500');
-                    scanButton.classList.add('bg-green-500', 'hover:bg-green-600');
-                    showNotification('Unable to start scanner.', false);
+                    resetScannerUI();
+                    showNotification('Unable to start scanner. Please grant camera permissions.', false);
                 });
             }
         });
