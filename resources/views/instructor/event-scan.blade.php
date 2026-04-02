@@ -285,29 +285,35 @@
 
         const onScanSuccess = (decodedText, decodedResult) => {
             if (!isScanning) return;
-            isScanning = false;
 
-            reader.stop().then(() => {
-                readerContainer.classList.add('hidden');
+            reader.pause();
 
-                scanButtonText.innerHTML = `<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m0 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m0 0v-4m0 4l-5-5"></path></svg> Start Scanner`;
-                scanButton.classList.remove('bg-red-500', 'hover:bg-red-600');
-                scanButton.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
-
-                fetch('/api/event-attendance', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ studentUid: decodedText, eventId: "{{ $eventId }}" })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    showNotification(data.message, data.success);
-                    if (data.success) {
-                        setTimeout(() => location.reload(), 1000);
+            fetch('/api/event-attendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                body: JSON.stringify({ studentUid: decodedText, eventId: "{{ $eventId }}" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                showNotification(data.message, data.success);
+                if (data.success) {
+                    studentDetailsModal.open(decodedText);
+                    setTimeout(() => {
+                        studentDetailsModal.close();
+                        if (isScanning) {
+                            reader.resume();
+                        }
+                    }, 1000);
+                } else {
+                     if (isScanning) {
+                        reader.resume();
                     }
-                }).catch(error => {
-                    showNotification('An error occurred. Please try again.', false);
-                });
+                }
+            }).catch(error => {
+                showNotification('An error occurred. Please try again.', false);
+                if (isScanning) {
+                    reader.resume();
+                }
             });
         };
 
@@ -323,6 +329,7 @@
         
         scanButton.addEventListener('click', () => {
             if (isScanning) {
+                isScanning = false;
                 reader.stop().then(() => {
                     resetScannerUI();
                 }).catch(err => {
