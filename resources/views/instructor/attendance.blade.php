@@ -42,46 +42,87 @@
             </div>
         </div>
 
+        @php
+            $timedInStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_in']));
+            $timedOutStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_out']) && $timestamps['time_out']);
+        @endphp
+
         <!-- Attended Students List -->
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6 border-b">
                 <h3 class="text-2xl font-bold text-gray-800">Attended Students ({{ count($attendance) }})</h3>
             </div>
-            @if (count($attendance) > 0)
-                <ul class="divide-y divide-gray-200">
-                    @foreach ($attendance as $studentUid => $timestamp)
-                        <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition cursor-pointer student-entry" data-student-uid="{{ $studentUid }}">
-                            <div class="flex flex-col sm:flex-row sm:items-center">
-                                <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                        <span class="font-bold text-gray-600">{{ substr($students[$studentUid]['firstName'], 0, 1) }}{{ substr($students[$studentUid]['lastName'], 0, 1) }}</span>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
-                                        <p class="text-sm text-gray-500">ID: {{ $students[$studentUid]['schoolId'] }}</p>
-                                    </div>
-                                </div>
-                                <span class="text-sm text-gray-600 mt-2 sm:mt-0 sm:ml-4">{{ date('F j, Y, g:i a', $timestamp / 1000) }}</span>
-                            </div>
-                            <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 p-2 rounded-full transition">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                </button>
-                            </form>
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <div class="text-center py-10 px-6">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No students yet</h3>
-                    <p class="mt-1 text-sm text-gray-500">No students have marked their attendance yet.</p>
+            <!-- Tabs -->
+            <div>
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex" aria-label="Tabs">
+                        <button id="tab-time-in" class="w-1/2 text-center py-4 px-1 border-b-2 font-medium text-sm border-indigo-500 text-indigo-600">
+                            Time In ({{ count($timedInStudents) }})
+                        </button>
+                        <button id="tab-time-out" class="w-1/2 text-center py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                            Time Out ({{ count($timedOutStudents) }})
+                        </button>
+                    </nav>
                 </div>
-            @endif
+            </div>
+
+            <!-- Time In List -->
+            <div id="content-time-in">
+                @if (count($timedInStudents) > 0)
+                    <ul class="divide-y divide-gray-200">
+                        @foreach ($timedInStudents as $studentUid => $timestamps)
+                            <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
+                                <div class="student-entry cursor-pointer flex-grow" data-student-uid="{{ $studentUid }}">
+                                    <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_in']) }}</span>
+                                    <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 p-2 rounded-full transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="text-center py-10 px-6">
+                        <p class="mt-1 text-sm text-gray-500">No students have timed in yet.</p>
+                    </div>
+                @endif
+            </div>
+
+            <!-- Time Out List -->
+            <div id="content-time-out" class="hidden">
+                @if (count($timedOutStudents) > 0)
+                    <ul class="divide-y divide-gray-200">
+                        @foreach ($timedOutStudents as $studentUid => $timestamps)
+                            <li class="p-4 flex justify-between items-center hover:bg-gray-50 transition">
+                                <div class="student-entry cursor-pointer flex-grow" data-student-uid="{{ $studentUid }}">
+                                    <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_out']) }}</span>
+                                    <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700 p-2 rounded-full transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <div class="text-center py-10 px-6">
+                        <p class="mt-1 text-sm text-gray-500">No students have timed out yet.</p>
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 </div>
@@ -174,6 +215,30 @@
                 notification.remove();
             }, 3000);
         }
+
+        // Tab Logic
+        const tabTimeIn = document.getElementById('tab-time-in');
+        const tabTimeOut = document.getElementById('tab-time-out');
+        const contentTimeIn = document.getElementById('content-time-in');
+        const contentTimeOut = document.getElementById('content-time-out');
+
+        tabTimeIn.addEventListener('click', () => {
+            tabTimeIn.classList.add('border-indigo-500', 'text-indigo-600');
+            tabTimeIn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            tabTimeOut.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            tabTimeOut.classList.remove('border-indigo-500', 'text-indigo-600');
+            contentTimeIn.classList.remove('hidden');
+            contentTimeOut.classList.add('hidden');
+        });
+
+        tabTimeOut.addEventListener('click', () => {
+            tabTimeOut.classList.add('border-indigo-500', 'text-indigo-600');
+            tabTimeOut.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            tabTimeIn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+            tabTimeIn.classList.remove('border-indigo-500', 'text-indigo-600');
+            contentTimeOut.classList.remove('hidden');
+            contentTimeIn.classList.add('hidden');
+        });
 
         // Edit Modal Logic
         const editButton = document.getElementById('edit-button');

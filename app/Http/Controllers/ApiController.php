@@ -30,12 +30,30 @@ class ApiController extends Controller
         $roomStudents = $roomStudentsRef->getValue();
 
         if (!isset($roomStudents[$studentUid])) {
-            return response()->json(['success' => false, 'message' => 'Invalid student']);
+            return response()->json(['success' => false, 'message' => 'Invalid student for this room']);
         }
         
-        $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/students/' . $studentUid)->set(time());
+        $attendanceRef = $this->database->getReference('attendance/' . $roomCode . '/' . $listId . '/students/' . $studentUid);
+        $attendanceEntry = $attendanceRef->getValue();
 
-        return response()->json(['success' => true, 'message' => 'Successfully scanned']);
+        if (is_array($attendanceEntry) && isset($attendanceEntry['time_in'])) {
+            // Already timed in. This scan is for time-out.
+            if (!isset($attendanceEntry['time_out']) || $attendanceEntry['time_out'] === null) {
+                $attendanceRef->update(['time_out' => time()]);
+                return response()->json(['success' => true, 'message' => 'Successfully timed out']);
+            } else {
+                // If user scans again after timing out, update time-out.
+                $attendanceRef->update(['time_out' => time()]);
+                return response()->json(['success' => true, 'message' => 'Time out updated']);
+            }
+        } else {
+            // First scan. This is a time-in.
+            $attendanceRef->set([
+                'time_in' => time(),
+                'time_out' => null
+            ]);
+            return response()->json(['success' => true, 'message' => 'Successfully timed in']);
+        }
     }
 
     public function markEventAttendance(Request $request)
@@ -55,8 +73,26 @@ class ApiController extends Controller
             return response()->json(['success' => false, 'message' => 'Invalid student']);
         }
 
-        $this->database->getReference('event-attendance/' . $eventId . '/students/' . $studentUid)->set(time());
+        $attendanceRef = $this->database->getReference('event-attendance/' . $eventId . '/students/' . $studentUid);
+        $attendanceEntry = $attendanceRef->getValue();
 
-        return response()->json(['success' => true, 'message' => 'Successfully scanned']);
+        if (is_array($attendanceEntry) && isset($attendanceEntry['time_in'])) {
+            // Already timed in. This scan is for time-out.
+            if (!isset($attendanceEntry['time_out']) || $attendanceEntry['time_out'] === null) {
+                $attendanceRef->update(['time_out' => time()]);
+                return response()->json(['success' => true, 'message' => 'Successfully timed out']);
+            } else {
+                // If user scans again after timing out, update time-out.
+                $attendanceRef->update(['time_out' => time()]);
+                return response()->json(['success' => true, 'message' => 'Time out updated']);
+            }
+        } else {
+            // First scan. This is a time-in.
+            $attendanceRef->set([
+                'time_in' => time(),
+                'time_out' => null,
+            ]);
+            return response()->json(['success' => true, 'message' => 'Successfully timed in']);
+        }
     }
 }
