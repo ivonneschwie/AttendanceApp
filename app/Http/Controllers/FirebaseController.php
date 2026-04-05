@@ -159,6 +159,8 @@ class FirebaseController extends Controller
             'last_name' => 'required|string',
             'middle_initial' => 'nullable|string|max:1',
             'school_id' => 'required|string',
+            'year_level' => 'required|string',
+            'block' => 'required|string',
         ]);
 
         $userUid = session('user_uid');
@@ -172,6 +174,8 @@ class FirebaseController extends Controller
             'lastName' => $request->last_name,
             'middleInitial' => $request->middle_initial,
             'schoolId' => $request->school_id,
+            'yearLevel' => $request->year_level,
+            'block' => $request->block,
             'type' => 'student',
         ]);
 

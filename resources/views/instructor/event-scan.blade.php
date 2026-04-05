@@ -46,6 +46,15 @@
         </div>
 
         @php
+            function convertToGmtPlus8($timestamp) {
+                if (!is_numeric($timestamp)) {
+                    return 'N/A';
+                }
+                $datetime = new DateTime('@' . $timestamp);
+                $datetime->setTimezone(new DateTimeZone('Asia/Manila')); // GMT+8
+                return $datetime->format('g:i a');
+            }
+
             $timedInStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_in']));
             $timedOutStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_out']) && $timestamps['time_out']);
         @endphp
@@ -79,7 +88,7 @@
                                     <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_in']) }}</span>
+                                    <span class="text-sm text-gray-500 mr-4">{{ convertToGmtPlus8($timestamps['time_in']) }}</span>
                                     <button class="remove-student-btn text-red-600 hover:text-red-800 p-2 rounded-full" data-student-uid="{{ $studentUid }}" data-student-name="{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
@@ -104,7 +113,7 @@
                                     <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_out']) }}</span>
+                                    <span class="text-sm text-gray-500 mr-4">{{ convertToGmtPlus8($timestamps['time_out']) }}</span>
                                     <button class="remove-student-btn text-red-600 hover:text-red-800 p-2 rounded-full" data-student-uid="{{ $studentUid }}" data-student-name="{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>

@@ -44,6 +44,28 @@
                     @enderror
                 </div>
                 <div>
+                    <label for="year_level" class="block text-sm font-medium text-gray-700">Year Level</label>
+                    <select name="year_level" id="year_level" required
+                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('year_level') border-red-500 @enderror">
+                        <option value="" disabled selected>Select your year level</option>
+                        <option value="1st Year" {{ old('year_level') == '1st Year' ? 'selected' : '' }}>1st Year</option>
+                        <option value="2nd Year" {{ old('year_level') == '2nd Year' ? 'selected' : '' }}>2nd Year</option>
+                        <option value="3rd Year" {{ old('year_level') == '3rd Year' ? 'selected' : '' }}>3rd Year</option>
+                        <option value="4th Year" {{ old('year_level') == '4th Year' ? 'selected' : '' }}>4th Year</option>
+                    </select>
+                    @error('year_level')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="block" class="block text-sm font-medium text-gray-700">Block</label>
+                    <input type="text" name="block" id="block" value="{{ old('block') }}" required
+                           class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('block') border-red-500 @enderror">
+                    @error('block')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
                     <label for="school_id" class="block text-sm font-medium text-gray-700">School ID Number</label>
                     <input type="text" name="school_id" id="school_id" value="{{ old('school_id') }}" required
                            class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 @error('school_id') border-red-500 @enderror">

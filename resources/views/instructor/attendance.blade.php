@@ -46,6 +46,15 @@
         </div>
 
         @php
+            function convertToGmtPlus8($timestamp) {
+                if (!is_numeric($timestamp)) {
+                    return 'N/A';
+                }
+                $datetime = new DateTime('@' . $timestamp);
+                $datetime->setTimezone(new DateTimeZone('Asia/Manila')); // GMT+8
+                return $datetime->format('g:i a');
+            }
+
             $timedInStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_in']));
             $timedOutStudents = array_filter($attendance, fn($timestamps) => isset($timestamps['time_out']) && $timestamps['time_out']);
         @endphp
@@ -79,7 +88,7 @@
                                     <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_in']) }}</span>
+                                    <span class="text-sm text-gray-500 mr-4">{{ convertToGmtPlus8($timestamps['time_in']) }}</span>
                                     <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
@@ -108,7 +117,7 @@
                                     <p class="font-semibold text-gray-900">{{ $students[$studentUid]['firstName'] }} {{ $students[$studentUid]['lastName'] }}</p>
                                 </div>
                                 <div class="flex items-center">
-                                    <span class="text-sm text-gray-500 mr-4">{{ date('g:i a', $timestamps['time_out']) }}</span>
+                                    <span class="text-sm text-gray-500 mr-4">{{ convertToGmtPlus8($timestamps['time_out']) }}</span>
                                     <form action="/instructor/room/{{ $roomCode }}/attendance/{{ $listId }}/entry/{{ $studentUid }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\FirebaseService;
+use DateTime;
+use DateTimeZone;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -30,13 +32,14 @@ class ExportController extends Controller
             $data[] = [
                 'student_id' => $user['schoolId'] ?? $studentUid,
                 'name' => $user ? ($user['firstName'] . ' ' . $user['lastName']) : 'N/A',
-                'email' => $user['email'] ?? 'N/A',
-                'time_in' => isset($details['time_in']) ? date('Y-m-d H:i:s', $details['time_in']) : 'N/A',
-                'time_out' => isset($details['time_out']) && $details['time_out'] ? date('Y-m-d H:i:s', $details['time_out']) : 'N/A',
+                'year_level' => $user['yearLevel'] ?? 'N/A',
+                'block' => $user['block'] ?? 'N/A',
+                'time_in' => isset($details['time_in']) ? $this->convertToGmtPlus8($details['time_in']) : 'N/A',
+                'time_out' => isset($details['time_out']) && $details['time_out'] ? $this->convertToGmtPlus8($details['time_out']) : 'N/A',
             ];
         }
 
-        return $this->exportToExcel('Room_Attendance_' . $listName, ['Student ID', 'Name', 'Email', 'Time In', 'Time Out'], $data);
+        return $this->exportToExcel('Room_Attendance_' . $listName, ['Student ID', 'Name', 'Year Level', 'Block', 'Time In', 'Time Out'], $data);
     }
 
     public function exportEventAttendance($eventId)
@@ -53,13 +56,21 @@ class ExportController extends Controller
             $data[] = [
                 'student_id' => $user['schoolId'] ?? $studentUid,
                 'name' => $user ? ($user['firstName'] . ' ' . $user['lastName']) : 'N/A',
-                'email' => $user['email'] ?? 'N/A',
-                'time_in' => isset($details['time_in']) ? date('Y-m-d H:i:s', $details['time_in']) : 'N/A',
-                'time_out' => isset($details['time_out']) && $details['time_out'] ? date('Y-m-d H:i:s', $details['time_out']) : 'N/A',
+                'year_level' => $user['yearLevel'] ?? 'N/A',
+                'block' => $user['block'] ?? 'N/A',
+                'time_in' => isset($details['time_in']) ? $this->convertToGmtPlus8($details['time_in']) : 'N/A',
+                'time_out' => isset($details['time_out']) && $details['time_out'] ? $this->convertToGmtPlus8($details['time_out']) : 'N/A',
             ];
         }
 
-        return $this->exportToExcel('Event_Attendance_' . $eventName, ['Student ID', 'Name', 'Email', 'Time In', 'Time Out'], $data);
+        return $this->exportToExcel('Event_Attendance_' . $eventName, ['Student ID', 'Name', 'Year Level', 'Block', 'Time In', 'Time Out'], $data);
+    }
+
+    private function convertToGmtPlus8($timestamp)
+    {
+        $datetime = new DateTime('@' . $timestamp);
+        $datetime->setTimezone(new DateTimeZone('Asia/Manila')); // GMT+8
+        return $datetime->format('Y-m-d H:i:s');
     }
 
     private function exportToExcel($fileName, $headers, $data)
