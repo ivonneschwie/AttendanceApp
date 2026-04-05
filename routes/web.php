@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/', function () {
     if (session('user')) {
@@ -48,6 +49,8 @@ Route::middleware('instructor')->group(function () {
     Route::delete('/instructor/event/{eventId}/delete', [EventController::class, 'delete']);
     Route::post('/instructor/event/{eventId}/update', [EventController::class, 'update']);
     Route::delete('/instructor/event/{eventId}/student/{studentUid}/remove', [EventController::class, 'removeStudent']);
+    Route::get('/export/room/{roomCode}/attendance/{listId}', [ExportController::class, 'exportRoomAttendance']);
+    Route::get('/export/event/{eventId}/attendance', [ExportController::class, 'exportEventAttendance']);
 });
 
 Route::middleware('student')->group(function () {

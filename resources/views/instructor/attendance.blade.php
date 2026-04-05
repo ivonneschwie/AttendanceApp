@@ -15,6 +15,9 @@
                 <p class="text-lg text-gray-600 truncate">{{ $room['name'] }}</p>
             </div>
             <div class="flex-shrink-0 flex items-center space-x-2 ml-4">
+                <a href="/export/room/{{ $roomCode }}/attendance/{{ $listId }}" class="text-gray-500 hover:text-green-700 p-2 rounded-full transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                </a>
                 <button id="edit-button" class="text-gray-500 hover:text-gray-700 p-2 rounded-full transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 </button>
