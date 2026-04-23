@@ -9,7 +9,7 @@
                 <svg class="w-20 h-20 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <h1 class="text-5xl font-bold">UDD QR Attendance</h1>
             </div>
-            <p class="text-xl">Student Teacher Educational Portal. Boost Your Learning to New Heights.</p>
+            <p class="text-xl">Student Teacher Attendance Portal.</p>
         </div>
     </div>
 
