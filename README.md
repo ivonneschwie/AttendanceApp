@@ -18,6 +18,7 @@ This is a web-based attendance scanner application built with Laravel and Fireba
   - [5. Firebase Credentials Setup](#5-firebase-credentials-setup)
   - [6. Compile Frontend Assets](#6-compile-frontend-assets)
   - [7. Run the Development Server](#7-run-the-development-server)
+  - [8. Windows SSL Certificate Setup](#8-windows-ssl-certificate-setup-required-for-firebase-connection)
 - [🛠️ Available Commands](#️-available-commands)
 - [📖 Additional Documentation](#-additional-documentation)
 
@@ -119,6 +120,10 @@ Create your local environment configuration file:
    ```bash
    php artisan key:generate
    ```
+3. Open the `.env` file. 
+   Make sure to configure:
+   * `FIREBASE_PROJECT_ID=your-firebase-project-id` (Set this to your Firebase Project ID)
+   * `FIREBASE_CREDENTIALS=storage/app/firebase/firebase-credentials.json` 
 
 ### 5. Firebase Credentials Setup
 This application connects to Firebase for authentication, database syncing, and other backend operations. The service account credentials must be placed in a dedicated JSON file separate from the `.env` file.

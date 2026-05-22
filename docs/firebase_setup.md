@@ -102,16 +102,14 @@ To authenticate the Laravel backend with Firebase services, you must download a 
 
 1. Rename the downloaded `.json` file to `firebase-credentials.json`.
 2. Move this file to the following path in your cloned repository:
-   ```
-   storage/app/firebase/firebase-credentials.json
-   ```
+   `storage/app/firebase/firebase-credentials.json`
    *(Create the `firebase` directory inside `storage/app/` if it does not exist)*.
-3. Update your `.env` file with your **Firebase Project ID** and the credentials file path:
+3. Update your [.env](file:///d:/GithubRepos/AttendanceApp/.env) file with your **Firebase Project ID** and the credentials file path:
    ```ini
    FIREBASE_CREDENTIALS=storage/app/firebase/firebase-credentials.json
    FIREBASE_PROJECT_ID=your-firebase-project-id
    ```
-4. Open `app/Services/FirebaseService.php` and verify or update the database URI:
+4. Open [FirebaseService.php](file:///d:/GithubRepos/AttendanceApp/app/Services/FirebaseService.php) and verify or update the database URI:
    ```php
    ->withDatabaseUri('https://your-project-id-default-rtdb.firebaseio.com');
    ```
