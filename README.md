@@ -2,6 +2,15 @@
 
 This is a web-based attendance scanner application built with Laravel and Firebase. It allows instructors to create rooms, manage students, and track attendance using QR codes.
 
+## Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+*   **PHP:** Version 8.2 or higher
+*   **Composer:** [Dependency Manager for PHP](https://getcomposer.org/)
+*   **Node.js:** [JavaScript runtime environment](https://nodejs.org/) (which includes npm)
+*   **A web server:** (e.g., Nginx, Apache) or you can use the built-in Laravel development server.
+
 ## Dependencies
 
 ### Backend (PHP - Composer)
