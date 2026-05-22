@@ -33,8 +33,13 @@ class FirebaseController extends Controller
 
             return redirect('/onboarding');
         } catch (EmailExists $e) {
+            \Log::warning('Signup failure (email exists): ' . $request->email);
             return back()->withErrors(['email' => 'Email already exists.']);
         } catch (\Throwable $e) {
+            \Log::error('Signup failure: ' . $e->getMessage(), [
+                'exception' => $e,
+                'email' => $request->email
+            ]);
             return back()->withErrors(['message' => 'An error occurred during signup.']);
         }
     }
@@ -70,6 +75,10 @@ class FirebaseController extends Controller
 
             return redirect('/dashboard');
         } catch (\Throwable $e) {
+            \Log::error('Login failure: ' . $e->getMessage(), [
+                'exception' => $e,
+                'email' => $request->email
+            ]);
             return back()->withErrors(['login_error' => 'Invalid credentials.']);
         }
     }
