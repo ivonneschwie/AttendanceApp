@@ -104,12 +104,12 @@ To authenticate the Laravel backend with Firebase services, you must download a 
 2. Move this file to the following path in your cloned repository:
    `storage/app/firebase/firebase-credentials.json`
    *(Create the `firebase` directory inside `storage/app/` if it does not exist)*.
-3. Update your [.env](file:///d:/GithubRepos/AttendanceApp/.env) file with your **Firebase Project ID** and the credentials file path:
+3. Update your [.env](../.env) file with your **Firebase Project ID** and the credentials file path:
    ```ini
    FIREBASE_CREDENTIALS=storage/app/firebase/firebase-credentials.json
    FIREBASE_PROJECT_ID=your-firebase-project-id
    ```
-4. Open [FirebaseService.php](file:///d:/GithubRepos/AttendanceApp/app/Services/FirebaseService.php) and verify or update the database URI:
+4. Open [FirebaseService.php](../app/Services/FirebaseService.php) and verify or update the database URI:
    ```php
    ->withDatabaseUri('https://your-project-id-default-rtdb.firebaseio.com');
    ```
@@ -126,17 +126,17 @@ This happens because PHP on Windows does not have a built-in certificate authori
 ### How to resolve:
 1. We have downloaded the official curl CA bundle `cacert.pem` and saved it to:
    ```
-   D:\GithubRepos\AttendanceApp\storage\app\cacert.pem
+   .\AttendanceApp\storage\app\cacert.pem
    ```
 2. Open your active `php.ini` file. (To find which file is active, run `php --ini` in your command prompt).
 3. Locate the `[curl]` and `[openssl]` configurations.
 4. **Remove the leading semicolon (`;`)** from the `curl.cainfo` and `openssl.cafile` lines (uncomment them) and set their values to the absolute path of `cacert.pem`:
    ```ini
    [curl]
-   curl.cainfo = "D:\GithubRepos\AttendanceApp\storage\app\cacert.pem"
+   curl.cainfo = ".\AttendanceApp\storage\app\cacert.pem"
 
    [openssl]
-   openssl.cafile = "D:\GithubRepos\AttendanceApp\storage\app\cacert.pem"
+   openssl.cafile = ".\AttendanceApp\storage\app\cacert.pem"
    ```
    > [!IMPORTANT]
    > Ensure the leading semicolon (`;`) is completely removed from the start of the configuration lines, otherwise PHP will ignore these settings.

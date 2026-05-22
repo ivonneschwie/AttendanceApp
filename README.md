@@ -168,16 +168,16 @@ This happens because PHP on Windows does not include a root certificate authorit
 
 **To resolve this:**
 1. A valid CA bundle (`cacert.pem`) has already been downloaded to the repository at:
-   `D:\GithubRepos\AttendanceApp\storage\app\cacert.pem`
+   `.\AttendanceApp\storage\app\cacert.pem`
 2. Open your active `php.ini` file. (To locate the active file path, run `php --ini` in your terminal).
 3. Search for the `curl.cainfo` and `openssl.cafile` directives.
 4. **Remove the leading semicolon (`;`)** to uncomment these lines, and set their values to the absolute path of `cacert.pem`:
    ```ini
    [curl]
-   curl.cainfo = "D:\GithubRepos\AttendanceApp\storage\app\cacert.pem"
+   curl.cainfo = ".\AttendanceApp\storage\app\cacert.pem"
 
    [openssl]
-   openssl.cafile = "D:\GithubRepos\AttendanceApp\storage\app\cacert.pem"
+   openssl.cafile = ".\AttendanceApp\storage\app\cacert.pem"
    ```
    > [!IMPORTANT]
    > Make sure to remove the leading semicolon (`;`) otherwise PHP will ignore the configuration!

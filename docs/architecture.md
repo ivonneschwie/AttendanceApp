@@ -60,10 +60,10 @@ Routes are grouped and isolated using Laravel middleware in `routes/web.php`:
 
 ## 📁 Key File Map
 
-- [FirebaseService.php](file:///d:/GithubRepos/AttendanceApp/app/Services/FirebaseService.php): Creates the connections to Firebase Authentication, Realtime Database, and Cloud Messaging using the service account credentials.
-- [FirebaseController.php](file:///d:/GithubRepos/AttendanceApp/app/Http/Controllers/FirebaseController.php): Manages registration, logins, and landing dashboards by communicating with Firebase Auth and DB.
-- [RoomController.php](file:///d:/GithubRepos/AttendanceApp/app/Http/Controllers/RoomController.php): Handles creating/viewing rooms, adding classes, modifying student rosters, and modifying attendance sheets.
-- [EventController.php](file:///d:/GithubRepos/AttendanceApp/app/Http/Controllers/EventController.php): Handles creating/managing events (which differ from classroom rooms because they are one-off assemblies with different check-in lists).
-- [ExportController.php](file:///d:/GithubRepos/AttendanceApp/app/Http/Controllers/ExportController.php): Uses the `PhpSpreadsheet` library to build Excel formats of attendance lists and initiates browser downloads.
-- [ApiController.php](file:///d:/GithubRepos/AttendanceApp/app/Http/Controllers/ApiController.php): Provides endpoints for hardware scanners or scanning devices to register student arrivals/departures.
-- [firebase-credentials.json](file:///d:/GithubRepos/AttendanceApp/storage/app/firebase/firebase-credentials.json): The key file containing Firebase credentials (git-ignored for security).
+- [FirebaseService.php](../app/Services/FirebaseService.php): Creates the connections to Firebase Authentication, Realtime Database, and Cloud Messaging using the service account credentials.
+- [FirebaseController.php](../app/Http/Controllers/FirebaseController.php): Manages registration, logins, and landing dashboards by communicating with Firebase Auth and DB.
+- [RoomController.php](../app/Http/Controllers/RoomController.php): Handles creating/viewing rooms, adding classes, modifying student rosters, and modifying attendance sheets.
+- [EventController.php](../app/Http/Controllers/EventController.php): Handles creating/managing events (which differ from classroom rooms because they are one-off assemblies with different check-in lists).
+- [ExportController.php](../app/Http/Controllers/ExportController.php): Uses the `PhpSpreadsheet` library to build Excel formats of attendance lists and initiates browser downloads.
+- [ApiController.php](../app/Http/Controllers/ApiController.php): Provides endpoints for hardware scanners or scanning devices to register student arrivals/departures.
+- [firebase-credentials.json](../storage/app/firebase/firebase-credentials.json): The key file containing Firebase credentials (git-ignored for security).
