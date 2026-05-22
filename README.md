@@ -37,8 +37,8 @@ Before you begin, ensure you have the following installed on your system:
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/Teejay-corp/attendance-scanner.git
-    cd attendance-scanner
+    git clone [https://github.com/ivonneschwie/AttendanceApp.git]
+    cd AttendanceApp
     ```
 
 2.  **Install PHP dependencies:**
